@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چت Firebase</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-dark text-light">
+    <div class="container py-5">
+        <div class="chat-container bg-secondary p-4 rounded shadow-lg">
+            <div id="messages" class="messages mb-3"></div>
+            <div class="input-group">
+                <input type="text" id="messageInput" class="form-control" placeholder="پیام خود را وارد کنید" aria-label="Message input">
+                <button id="sendButton" class="btn btn-primary">ارسال پیام</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="chat.js"></script>
+</body>
+</html>
