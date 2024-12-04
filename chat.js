@@ -8,12 +8,12 @@ const firebaseConfig = {
     authDomain: "hamid-cd6fc.firebaseapp.com",
     databaseURL: "https://hamid-cd6fc-default-rtdb.firebaseio.com",
     projectId: "hamid-cd6fc",
-    storageBucket: "hamid-cd6fc.firebasestorage.app",
+    storageBucket: "hamid-cd6fc.appspot.com",
     messagingSenderId: "503068161640",
     appId: "1:503068161640:web:2d11bcdceecf3057212ddd"
 };
 
-// Initialize Firebase
+
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
@@ -30,14 +30,30 @@ if (!userName) {
     localStorage.setItem('userName', userName);
 }
 
-function sendMessage() {
+
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    let color = '#';
+    for (let i = 0; i < 3; i++) {
+        const value = (hash >> (i * 8)) & 0xFF;
+        color += ('00' + value.toString(16)).substr(-2);
+    }
+    return color;
+}
+
+
+function sendMessage(replyTo = null) {
     const message = messageInput.value.trim();
     if (message !== "") {
-        const newMessageKey = Date.now(); 
+        const newMessageKey = Date.now();
         set(ref(db, 'messages/' + newMessageKey), {
             user: userName,
             text: message,
-            timestamp: newMessageKey
+            timestamp: newMessageKey,
+            replyTo: replyTo,
         });
         messageInput.value = "";
     }
@@ -45,19 +61,35 @@ function sendMessage() {
 
 onValue(messagesRef, (snapshot) => {
     const messages = snapshot.val();
-    messagesDiv.innerHTML = ''; 
+    messagesDiv.innerHTML = '';
     for (let key in messages) {
         const message = messages[key];
+
+    
         const newMessage = document.createElement('div');
         newMessage.classList.add(message.user === userName ? 'user-message' : 'system-message');
-        newMessage.textContent = `${message.user}: ${message.text}`;
+        newMessage.style.borderLeftColor = stringToColor(message.user);
+        newMessage.innerHTML = `
+            <div>${message.user}: ${message.text}</div>
+            ${message.replyTo ? `<div class="reply">ریپلای: ${messages[message.replyTo]?.text || "پیام حذف شده"}</div>` : ""}
+            <button class="btn-reply" data-id="${key}">ریپلای</button>
+        `;
         messagesDiv.appendChild(newMessage);
     }
-    messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+
+
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+
+    document.querySelectorAll('.btn-reply').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const messageId = e.target.dataset.id;
+            sendMessage(messageId);
+        });
+    });
 });
 
-
-sendButton.addEventListener('click', sendMessage);
+sendButton.addEventListener('click', () => sendMessage());
 
 messageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
