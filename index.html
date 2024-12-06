@@ -3,21 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>چت Firebase</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+    <title>چت عمومی</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body class="bg-dark text-light">
-    <div class="container py-5">
-        <div class="chat-container bg-secondary p-4 rounded shadow-lg">
-            <div id="replyPreview" class="alert alert-info py-2 px-3" style="display: none;"></div>
-            <div id="messages" class="messages mb-3"></div>
-            <div class="input-group">
-                <input type="text" id="messageInput" class="form-control" placeholder="پیام خود را وارد کنید" aria-label="Message input">
-                <button id="sendButton" class="btn btn-primary">ارسال پیام</button>
+<body>
+    <div id="chat">
+        <div id="userInfo">
+            <div id="userNameDisplay"></div>
+            <div><h4>چت عمومی</h4></div>
+            <div class="d-flex">
+                <span>رنگ کاربری شما :</span>
+                <div id="userColorDisplay"></div>
             </div>
         </div>
+        <div id="messages"></div>
+        <div id="replyPreview" class="reply-preview"></div>
+        <div id="messageBox">
+            <input type="text" id="messageInput" placeholder="پیام خود را بنویسید..." />
+            <button id="sendButton"><i class="bi bi-send"></i> ارسال</button>
+        </div>
     </div>
-    <script type="module" src="chat.js"></script>
+    <script type="module" src="./chat.js"></script>
 </body>
 </html>
